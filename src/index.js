@@ -30,6 +30,18 @@ $(function() {
 		}
 	})
 
+	$('.go').click(function() {
+		var go = parseInt($('.J_input').val());
+		if(go && sheetData[go]) {
+			if(sheetData[go].length <= 0) {
+				alert('一共都没有' + go + '条数据哦！');
+				return;
+			}
+			current = go;
+			process();
+		}
+	});
+
 	$('.generate').click(function() {
 		if(!hasUpload) {
 			alert('请先上传xlsx文件！');
@@ -53,32 +65,32 @@ $(function() {
 
 	function upload() {
 		$.ajaxFileUpload({
-	        url: 'upload', 
-	        type: 'post',
-	        secureuri: false, //一般设置为false
-	        fileElementId: 'file', // 上传文件的id、name属性名
-	        dataType: 'json', //返回值类型，一般设置为json、application/json
-	        success: function(res, status){
-	        	if(res.success) {
-		        	hasUpload = true;
-		        	$('#file').hide();
-		        	$('.file-name').html(res.file);
-		        	$('.J_upload').html('已上传');
-		        	$('.delete').removeClass('hidden');
-		        	allData = res.data;
-	        	} else {
-	        		alert('上传文件失败！');
-	        	}
-	        },
-	        error: function(data, status, e){ 
-	        	alert('上传文件失败！');
-	        }
+			url: 'upload',
+			type: 'post',
+			secureuri: false, //一般设置为false
+			fileElementId: 'file', // 上传文件的id、name属性名
+			dataType: 'json', //返回值类型，一般设置为json、application/json
+			success: function(res, status){
+				if(res.success) {
+					hasUpload = true;
+					$('#file').hide();
+					$('.file-name').html(res.file);
+					$('.J_upload').html('已上传');
+					$('.delete').removeClass('hidden');
+					allData = res.data;
+				} else {
+					alert('上传文件失败！');
+				}
+			},
+			error: function(data, status, e){
+				alert('上传文件失败！');
+			}
 		});
 	}
 
 
 	function process() {
-	    sheetData = allData[sheet - 1].data;
+		sheetData = allData[sheet - 1].data;
 
 		var cols = sheetData[0];
 		if(sheetData[current].length <= 0) {
